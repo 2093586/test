@@ -1,0 +1,28 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 08 Input variable
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs: 
+      branch_name:
+        description: provide a release branch name
+        required: true
+        default: default
+
+  # Allows you to run this workflow manually from the Actions tab
+ 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo ${{ github.event.input.branch_name }}
+
+
