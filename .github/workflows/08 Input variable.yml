@@ -23,6 +23,6 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo ${{ github.event.input.branch_name }}
+        run: echo "${{ github.event.input.branch_name }}"
 
 
