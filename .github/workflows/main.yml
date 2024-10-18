@@ -1,0 +1,26 @@
+name: Scale up ECS service with OIDC
+on:
+ workflow_dispatch: # Manually trigger the workflow
+ 
+permissions:
+ id-token: write  # Required for OIDC
+ contents: read   # Allows reading repo contents
+jobs:
+ scale-ecs:
+   runs-on: ubuntu-latest
+   steps:
+#- name: Checkout code
+#uses: actions/checkout@v2
+   - name: Assume AWS Role using OIDC
+     id: aws-sts
+     uses: aws-actions/configure-aws-credentials@v3
+     with:
+       role-to-assume: arn:aws:iam::739275441922:role/2332741-GITHUB-OIDC-ROLE
+       aws-region: 'us-east-1'  # Specify your AWS region
+       
+   # - name: Scale ECS service
+   #   run: |
+   #     aws ecs update-service \
+   #       --cluster <your-cluster-name> \
+   #       --service <your-service-name> \
+   #       --desired-count 2
