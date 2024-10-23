@@ -82,7 +82,7 @@ jobs:
              ' > scale_ecs_service.py
    
    - name: Run ECS Service Scaling
-     run: python scale_ecs_service.p
+     run: python scale_ecs_service.py
    
   # - name: Check for Running Containers in ECS Cluster
   #   id: check-ecs
