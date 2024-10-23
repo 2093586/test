@@ -75,8 +75,8 @@ jobs:
                      sys.exit(1)
    
              if __name__ == "__main__":
-                 cluster_name = "Trcluster"
-                 service_name = "your-service-name"
+                 cluster_name = "TRFunctionalAPI"
+                 service_name = "nginx-datadog"
                  desired_count = 1
                  scale_ecs_service(cluster_name, service_name, desired_count)
              ' > scale_ecs_service.py
