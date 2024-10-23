@@ -9,6 +9,13 @@ jobs:
  scale-ecs:
    runs-on: ubuntu-latest
    steps:
+   - name: Set up Python
+     uses: actions/setup-python@v4
+     with:
+       python-version: '3.x'
+   - name: Install Boto3
+     run: |     
+       pip install boto3
 #- name: Checkout code
 #uses: actions/checkout@v2
    - name: Assume AWS Role using OIDC
@@ -18,21 +25,50 @@ jobs:
        role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
        aws-region: 'us-east-1'  # Specify your AWS region
 
-   - name: Check for Running Containers in ECS Cluster
-     id: check-ecs
+   - name: Add Python Script
      run: |
-      CLUSTER_NAME="TRFunctionalAPI"  # Replace with your ECS cluster name
-      RUNNING_TASKS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --desired-status RUNNING --query 'taskArns' --output text)
-      if [ -n "$RUNNING_TASKS" ]; then
-      echo "ECS tasks are currently running in $CLUSTER_NAME. Exiting..."
-      exit 1  # Exit the workflow if containers are running
-      else
-      echo "No running ECS tasks found. Proceeding..."
-      fi
-       
-   - name: Scale ECS service
-     run: |
-       aws ecs update-service \
-       --cluster TRFunctionalAPI \
-       --service nginx-datadog \
-       --desired-count 1
+           echo "Writing Python script..."
+           echo '
+           import boto3
+           import sys
+ 
+           def check_ecs_running_tasks(cluster_name):
+               ecs_client = boto3.client("ecs")
+               response = ecs_client.list_tasks(
+                   cluster=cluster_name,
+                   desiredStatus="RUNNING"
+               )
+               running_tasks = response.get("taskArns", [])
+               if running_tasks:
+                   print(f"Running tasks found: {running_tasks}")
+                   sys.exit(1)
+               else:
+                   print("No running tasks found.")
+                   sys.exit(0)
+ 
+           if __name__ == "__main__":
+               cluster_name = "TRFunctionalAPI"
+               check_ecs_running_tasks(cluster_name)
+           ' > check_ecs.py
+ 
+   - name: Run ECS Check
+     run: python check_ecs.py
+
+  # - name: Check for Running Containers in ECS Cluster
+  #   id: check-ecs
+  #   run: |
+  #    CLUSTER_NAME="TRFunctionalAPI"  # Replace with your ECS cluster name
+  #    RUNNING_TASKS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --desired-status RUNNING --query 'taskArns' --output text)
+  #    if [ -n "$RUNNING_TASKS" ]; then
+  #    echo "ECS tasks are currently running in $CLUSTER_NAME. Exiting..."
+  #    exit 1  # Exit the workflow if containers are running
+  #    else
+  #    echo "No running ECS tasks found. Proceeding..."
+  #    fi
+      
+  # - name: Scale ECS service
+  #   run: |
+  #     aws ecs update-service \
+  #     --cluster TRFunctionalAPI \
+  #     --service nginx-datadog \
+  #     --desired-count 1
