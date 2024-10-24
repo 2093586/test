@@ -39,7 +39,7 @@ jobs:
    - name: Count Matrix Values
      id: set-matrix-count
      run: |
-        matrix_count=$(yq eval '.scripts | length' matrix-values.yaml)
+        matrix_count=$(yq eval '.scripts | length' matrix.yaml)
         echo "Count: $matrix_count"
         echo "::set-output name=count::$matrix_count"
 
