@@ -8,6 +8,9 @@ permissions:
 jobs:
  scale-ecs:
    runs-on: ubuntu-latest
+   outputs:
+     matrix_count: ${{ steps.set-matrix-count.outputs.count }}  # Pass matrix count
+     matrix_values: ${{ steps.set-matrix-values.outputs.matrix }}  # Pass matrix values as a string
    steps:
    - name: Set up Python
      uses: actions/setup-python@v4
@@ -24,32 +27,32 @@ jobs:
      with:
        role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
        aws-region: 'us-east-1'  # Specify your AWS region
-
-
-   - name: Run ECS Check
+       
+    # count input parameter to scale up the runner.   
+   - name: Read Matrix Values from YAML
+     id: set-matrix-values
      run: |
-       pwd
-       ls -la
-       python check_ecs.py --cluster_name TRFunctionalAPI
+        matrix_values=$(yq eval '.scripts' matrix.yaml.yaml | jq -c '.')
+        echo "Matrix values: $matrix_values"
+        echo "::set-output name=matrix::$matrix_values"
+
+   - name: Count Matrix Values
+     id: set-matrix-count
+     run: |
+        matrix_count=$(yq eval '.scripts | length' matrix-values.yaml)
+        echo "Count: $matrix_count"
+        echo "::set-output name=count::$matrix_count"
+
+   # - name: Run ECS Check
+   #   run: |
+   #     pwd
+   #     ls -la
+   #     python check_ecs.py --cluster_name TRFunctionalAPI
 
    - name: Run ECS Service Scaling
-     run: python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx-datadog --desired_count 1
+     run: |
+      DESIRED_COUNT=${{ steps.set-matrix-count.outputs.count }}
+      python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx-datadog --desired_count $DESIRED_COUNT
    
-  # - name: Check for Running Containers in ECS Cluster
-  #   id: check-ecs
-  #   run: |
-  #    CLUSTER_NAME="TRFunctionalAPI"  # Replace with your ECS cluster name
-  #    RUNNING_TASKS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --desired-status RUNNING --query 'taskArns' --output text)
-  #    if [ -n "$RUNNING_TASKS" ]; then
-  #    echo "ECS tasks are currently running in $CLUSTER_NAME. Exiting..."
-  #    exit 1  # Exit the workflow if containers are running
-  #    else
-  #    echo "No running ECS tasks found. Proceeding..."
-  #    fi
-      
-  # - name: Scale ECS service
-  #   run: |
-  #     aws ecs update-service \
-  #     --cluster TRFunctionalAPI \
-  #     --service nginx-datadog \
-  #     --desired-count 1
+
+
