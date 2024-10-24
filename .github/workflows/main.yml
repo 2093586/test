@@ -25,34 +25,11 @@ jobs:
        role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
        aws-region: 'us-east-1'  # Specify your AWS region
 
-   - name: Add Python Script
-     run: |
-           echo "Writing Python script..."
-           echo '
-           import boto3
-           import sys
- 
-           def check_ecs_running_tasks(cluster_name):
-               ecs_client = boto3.client("ecs")
-               response = ecs_client.list_tasks(
-                   cluster=cluster_name,
-                   desiredStatus="RUNNING"
-               )
-               running_tasks = response.get("taskArns", [])
-               if running_tasks:
-                   print(f"Running tasks found: {running_tasks}")
-                   sys.exit(1)
-               else:
-                   print("No running tasks found.")
-                 
- 
-           if __name__ == "__main__":
-               cluster_name = "TRFunctionalAPI"
-               check_ecs_running_tasks(cluster_name)
-           ' > check_ecs.py
- 
+
    - name: Run ECS Check
-     run: python check_ecs.py
+     run: |
+       cd .
+       python check_ecs.py --cluster_name TRFunctionalAPI
 
    - name: Add Python Script for Scaling ECS Service
      run: |
