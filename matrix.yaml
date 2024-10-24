@@ -1,0 +1,9 @@
+scripts:
+#  - script1.py
+#  - script2.py
+#  - script3.py
+#  - script4.py
+#  - script5.py
+   - echo " script 1"
+   - echo " script 2"
+   - echo " script 3"
