@@ -32,35 +32,8 @@ jobs:
        ls -la
        python check_ecs.py --cluster_name TRFunctionalAPI
 
-   - name: Add Python Script for Scaling ECS Service
-     run: |
-             echo "Writing Python script to scale ECS service..."
-             echo '
-             import boto3
-             import sys
-   
-             def scale_ecs_service(cluster_name, service_name, desired_count):
-                 ecs_client = boto3.client("ecs")
-                 try:
-                     response = ecs_client.update_service(
-                         cluster=cluster_name,
-                         service=service_name,
-                         desiredCount=desired_count
-                     )
-                     print(f"Successfully scaled service {service_name} to {desired_count}.")
-                 except Exception as e:
-                     print(f"Failed to scale service: {str(e)}")
-                     sys.exit(1)
-   
-             if __name__ == "__main__":
-                 cluster_name = "TRFunctionalAPI"
-                 service_name = "nginx-datadog"
-                 desired_count = 1
-                 scale_ecs_service(cluster_name, service_name, desired_count)
-             ' > scale_ecs_service.py
-   
    - name: Run ECS Service Scaling
-     run: python scale_ecs_service.py
+     run: python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx_datadog --desired_count 1
    
   # - name: Check for Running Containers in ECS Cluster
   #   id: check-ecs
