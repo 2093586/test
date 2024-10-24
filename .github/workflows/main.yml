@@ -1,10 +1,11 @@
-name: Scale up ECS service with OIDC
+name: FT-PT workflow
 on:
  workflow_dispatch: # Manually trigger the workflow
  
 permissions:
  id-token: write  # Required for OIDC
  contents: read   # Allows reading repo contents
+
 jobs:
  scale-ecs:
    runs-on: ubuntu-latest
@@ -19,16 +20,17 @@ jobs:
    - name: Install Boto3
      run: |     
        pip install boto3
-   - name: Checkout code
+   - name: Checkout code to download scripts
      uses: actions/checkout@v2
-   - name: Assume AWS Role using OIDC
+     
+   - name: Github to AWS connection using OIDC
      id: aws-sts
      uses: aws-actions/configure-aws-credentials@v3
      with:
        role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
        aws-region: 'us-east-1'  # Specify your AWS region
        
-    # count input parameter to scale up the runner.   
+  # count input parameter from matrix.yaml file to scale up the runner.  
    - name: Read Matrix Values from YAML
      id: set-matrix-values
      run: |
@@ -42,17 +44,26 @@ jobs:
         matrix_count=$(yq eval '.scripts | length' matrix.yaml)
         echo "Count: $matrix_count"
         echo "::set-output name=count::$matrix_count"
-
+# Check If Any service is running in ECS cluster , if yes job will fail else it will execute
    # - name: Run ECS Check
    #   run: |
    #     pwd
    #     ls -la
    #     python check_ecs.py --cluster_name TRFunctionalAPI
-
+# Scale the Service with count 
    - name: Run ECS Service Scaling
      run: |
       DESIRED_COUNT=${{ steps.set-matrix-count.outputs.count }}
-      python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx-datadog --desired_count $DESIRED_COUNT
-   
+      python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx-datadog --desired_count $DESIRED_COUNT\
 
-
+ run-scripts:
+   needs: scale-ecs  # Run after the scale-ecs job
+   runs-on: ubuntu-latest
+   strategy:
+     matrix:
+       script: ${{ fromJson(needs.scale-ecs.outputs.matrix_values) }}  # Use matrix values from the previous job
+   steps:
+    - name: Run Script
+      run: |
+        echo "Running ${{ matrix.script }}"
+        python ${{ matrix.script }}
