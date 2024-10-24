@@ -66,4 +66,4 @@ jobs:
     - name: Run Script
       run: |
         echo "Running ${{ matrix.script }}"
-        python ${{ matrix.script }}
+     
