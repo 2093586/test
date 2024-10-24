@@ -33,7 +33,7 @@ jobs:
        python check_ecs.py --cluster_name TRFunctionalAPI
 
    - name: Run ECS Service Scaling
-     run: python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx_datadog --desired_count 1
+     run: python scale_ecs_service.py --cluster_name TRFunctionalAPI --service_name nginx-datadog --desired_count 1
    
   # - name: Check for Running Containers in ECS Cluster
   #   id: check-ecs
