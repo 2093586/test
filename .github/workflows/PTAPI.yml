@@ -42,7 +42,7 @@ jobs:
   jmeter_job:
 # The type of runner that the job will run on  
     runs-on: self-hosted
-    
+    needs: scale-ecs
 # Git Checks-out our repository      
     name: JMeter Test Execution
     steps:      
@@ -77,7 +77,8 @@ jobs:
         path: html_report
         if-no-files-found: error
 
-  stop-service:
+  stop-service: 
+    needs: jmeter_job  
     runs-on: ubuntu-latest
     steps:
     - name: Set up Python
