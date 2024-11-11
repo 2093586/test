@@ -1,0 +1,15 @@
+name: Github runner
+on: 
+ workflow_dispatch:
+jobs:
+  test:
+    runs-on: github-ecs-runner
+    steps:
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
