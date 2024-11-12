@@ -1,0 +1,87 @@
+name: Github runner
+on: 
+ workflow_dispatch:
+jobs:
+  test:
+    runs-on: github-ecs-runner
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+       python-version: '3.x'
+    - name: Install Boto3
+      run: |     
+       pip install boto3
+    - name: Checkout code to download scripts
+      uses: actions/checkout@v2
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
+
+  test2:
+    runs-on: github-ecs-runner
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+       python-version: '3.x'
+    - name: Install Boto3
+      run: |     
+       pip install boto3
+    - name: Checkout code to download scripts
+      uses: actions/checkout@v2
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
+  test3:
+    runs-on: github-ecs-runner
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+       python-version: '3.x'
+    - name: Install Boto3
+      run: |     
+       pip install boto3
+    - name: Checkout code to download scripts
+      uses: actions/checkout@v2
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
+
+  test4:
+    runs-on: github-ecs-runner
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+       python-version: '3.x'
+    - name: Install Boto3
+      run: |     
+       pip install boto3
+    - name: Checkout code to download scripts
+      uses: actions/checkout@v2
+    - name: sleep
+      run: |
+        echo "hello world"
+        sleep 100
+  test5:
+    runs-on: github-autoscale
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+       python-version: '3.x'
+    - name: Install Boto3
+      run: |     
+       pip install boto3
+    - name: Checkout code to download scripts
+      uses: actions/checkout@v2
+    - name: sleep
+      run: |
+        sudo apt-get update
+        echo "hello world"
+        sleep 200
