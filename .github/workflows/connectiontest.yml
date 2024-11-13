@@ -21,7 +21,7 @@ jobs:
    - name: Checkout code to download scripts
      uses: actions/checkout@v2
    - name: Run service status check
-     run: python check_service.py
+     run: python checkecs2.py
      env:
        AWS_DEFAULT_REGION: 'us-east-1'
      
