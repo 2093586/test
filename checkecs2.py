@@ -26,7 +26,7 @@ def check_service_status(cluster_name, service_name):
         print(f"Service {service_name} is not running.")
 
 if __name__ == "__main__":
-    cluster_name = 'your-cluster-name'
-    service_name = 'service1'
+    cluster_name = 'TRPerformanceAPI'
+    service_name = 'PT_API'
     
     check_service_status(cluster_name, service_name)
