@@ -1,10 +1,10 @@
-name: FT-PT workflow
+name: connectiontest
 on:
  workflow_dispatch: # Manually trigger the workflow
  
-# permissions:
-#  id-token: write  # Required for OIDC
-#  contents: read   # Allows reading repo contents
+permissions:
+ id-token: write  # Required for OIDC
+ contents: read   # Allows reading repo contents
 
 jobs:
  scale-ecs:
@@ -21,12 +21,12 @@ jobs:
    - name: Checkout code to download scripts
      uses: actions/checkout@v2
      
-   # - name: Github to AWS connection using OIDC
-   #   id: aws-sts
-   #   uses: aws-actions/configure-aws-credentials@v3
-   #   with:
-   #     role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
-   #     aws-region: 'us-east-1'  # Specify your AWS region
+   - name: Github to AWS connection using OIDC
+     id: aws-sts
+     uses: aws-actions/configure-aws-credentials@v3
+     with:
+       role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
+       aws-region: 'us-east-1'  # Specify your AWS region
        
 
    - name: Run ECS Check
