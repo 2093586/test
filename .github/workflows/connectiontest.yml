@@ -27,7 +27,7 @@ jobs:
        CLUSTER_NAME: TRPerformanceAPI
        SERVICE_NAME: PT_API
    - name: Scale ECS Service
-     run: python scale_service.py TRPerformanceAPI PT_API 2
+     run: python scale_service3.py TRPerformanceAPI PT_API 2
      env:
         AWS_DEFAULT_REGION: 'us-east-1'  
    # - name: Github to AWS connection using OIDC
