@@ -29,11 +29,11 @@ jobs:
    #     aws-region: 'us-east-1'  # Specify your AWS region
        
 
-   - name: Run ECS Check
-     run: |
-       pwd
-       ls -la
-       python check_ecs.py --cluster_name TRPerformanceAPI
+   # - name: Run ECS Check
+   #   run: |
+   #     pwd
+   #     ls -la
+   #     python check_ecs.py --cluster_name TRPerformanceAPI
 # Scale the Service with count 
    - name: Run ECS Service Scaling
      run: |
