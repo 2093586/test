@@ -33,7 +33,7 @@ jobs:
      run: |
        pwd
        ls -la
-       python check_ecs.py --cluster_name TRFunctionalAPI
+       python check_ecs.py --cluster_name TRPerformanceAPI
 # Scale the Service with count 
    - name: Run ECS Service Scaling
      run: |
