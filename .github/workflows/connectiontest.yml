@@ -1,0 +1,42 @@
+name: FT-PT workflow
+on:
+ workflow_dispatch: # Manually trigger the workflow
+ 
+# permissions:
+#  id-token: write  # Required for OIDC
+#  contents: read   # Allows reading repo contents
+
+jobs:
+ scale-ecs:
+   runs-on: github-autoscale
+  
+   steps:
+   - name: Set up Python
+     uses: actions/setup-python@v4
+     with:
+       python-version: '3.x'
+   - name: Install Boto3
+     run: |     
+       pip install boto3
+   - name: Checkout code to download scripts
+     uses: actions/checkout@v2
+     
+   # - name: Github to AWS connection using OIDC
+   #   id: aws-sts
+   #   uses: aws-actions/configure-aws-credentials@v3
+   #   with:
+   #     role-to-assume: arn:aws:iam::739275441922:role/Sourabh-OpenID
+   #     aws-region: 'us-east-1'  # Specify your AWS region
+       
+
+   - name: Run ECS Check
+     run: |
+       pwd
+       ls -la
+       python check_ecs.py --cluster_name TRFunctionalAPI
+# Scale the Service with count 
+   - name: Run ECS Service Scaling
+     run: |
+
+      python scale_ecs_service.py --cluster_name TRPerformanceAPI --service_name PT_API --desired_count 2
+
