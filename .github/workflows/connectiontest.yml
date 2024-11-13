@@ -20,6 +20,10 @@ jobs:
        pip install boto3
    - name: Checkout code to download scripts
      uses: actions/checkout@v2
+   - name: Run service status check
+     run: python check_service.py
+     env:
+       AWS_DEFAULT_REGION: 'us-east-1'
      
    # - name: Github to AWS connection using OIDC
    #   id: aws-sts
