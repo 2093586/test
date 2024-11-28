@@ -8,7 +8,7 @@ on:
 
 jobs:
  scale-ecs:
-   runs-on: github-autoscale
+   runs-on: ubuntu-runner
   
    steps:
    - name: Set up Python
