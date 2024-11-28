@@ -8,7 +8,7 @@ on:
 
 jobs:
  scale-ecs:
-   runs-on: ubuntu-runner
+   runs-on: ubuntu-latest
   
    steps:
    - name: Set up Python
